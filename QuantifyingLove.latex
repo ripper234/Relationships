@@ -1,0 +1,131 @@
+\documentclass{article}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\newcommand{\field}[1]{\mathbb{#1}}
+\newcommand{\reals}{\field{R}}
+\newcommand{\nats}{\field{N}}
+\title{Quantifying Love}
+\author{Ron Gross}
+
+\begin{document}
+
+
+
+
+\subsection{stutter notation}
+We introduce a notation for representing certain sequences of stuttered structures. We call a sequences of 
+stuttered structures $\{I_i\}$ {\em simple}, if
+
+\begin{enumerate}
+\item Every state in $I$ has a different valuation
+\item The stutter operations in $\{I_i\}$ are sorted according to depth.
+\item A stutter operation is performed at most one on every node.
+\end{enumerate}
+
+The first condition is assumed to simplify the notation, and it can be relaxed by changing states in $I$ 
+with identical value $v$ to new values $v_0\dots v_k$, and then changing in $I_\infty$ all values $v_i, i\le k$ to
+$v$.
+
+If $I\slt I_\infty$ then there exists a sequence $\{I'_i\}$ with starting with $I_0$
+with limit $I_\infty$, which satisfies the second and third conditions.
+
+For $op\in\{\rightarrow, \uparrow\}$ and tuple $\alpha=(v_1\dots v_k), \beta=(u_1\dots u_m)$ we define
+$\alpha op\triangleq (v_1\dots v_k op)$ and $\alpha\beta=(v_1\dots v_k, u_1\dots u_m). 
+
+We define a notion of $address$, which includes a set of directions on how to reach a state $s$ from the root $r$.
+For the initial structure $I$ the address of a state $v$ of depth $k$ is simply a tuple of $k+1$ state values 
+along a path from the root reaching $s$. If the address of a state in $I_i$ is $\alpha$, and $I_{i+1}$ is 
+obtained by applying $HS$ to $v$,
+then:
+
+\begin{enumerate}
+\item The address of $v$ in $I_{i+1}$ is not changed.
+\item The address of the new copy of $v$ in $S$ is $\alpha\rightarrow$.
+\item For a decendant of $v$ in $I_i$ with address $\alpha\beta$, the address in $I_{i+1}$
+becomes $\alpha\rightarrow\beta$. More specifically, if $\alpha=(v_1\dots v_k), \beta=(u_1\dots u_m)$, then the address in the new structure is $(v_1\dots v_k-1, v_k\rightarrow, u_1\dots u_m)$.
+\end{enumerate}
+
+Let $P^k(I)$ be the set of addresses in $I$ starting at the root, with exactly $k$ different values. For example, if $I$ is the following structure:
+
+\image{paths1.eps}
+
+Then:
+
+\[\begin{array}{l}
+P^0(I) = \{\} 			\\
+P^1(I) = \{1\} 			\\
+P^2(I) = \{(1,2), (1,3)\}		\\
+\end{array}\]
+
+We identify $P_k(I)$ with $P$ when $I$ and $k$ are clear by context.
+Let $\alpha\in P$. Then we define
+
+\[\begin{array}{l}
+HS(\alpha, P) \triangleq P \setminus \{\alpha\beta | \alpha\betea\in P\} \cup \{\alpha\}
+\cup \{\alpha\rightarrow\beta | \alpha\beta\in P\} \\
+WS(\alpha, P) \triangleq P \cup \{alpha\uparrow\beta | \alpha\beta\in P\} \\
+\end{array}\]
+
+\image{paths2.eps}
+
+Let $P_0=P^k(I)$, and for $i>0, P_i=op(\alpha, P_{i-1})$, where $op\in \{HS, WS\}$ is the stutter operation 
+performed in the corresponding place in ${I_i}$, with $\alpha$ as the focus. 
+There is bijection between structures in $\{I_i\}$ and address sets in $\{P_i\}$. 
+
+Lemma
+
+Let $\{I_i\}, \{I'_i\}$ be simple sequences of structures that satisfy:
+\begin{enumerate}
+\item $I'_0=I_0$
+\item $I_0\slt I_\infty$
+\item $I'_0\slt I'_\infty$
+\end{enumerate}
+
+Let $\{P_i\}$ and $\{P'_i\}$ be sequences of the sets of all addresses in $\{I_i\}, \{I'_i\}$.
+Let $P_\infty, P'_\infty$ be the limits of $\{P_i\}$ and $\{P'_i\}$. Then
+
+\[\begin{array}{l}
+P_\infty = P'_\infty	& {\em \mbox{if and only if}}	& I_\infty \equiv I'_\infty
+\end{array}\]
+
+If $I_\infty\equiv I'_\infty$ then it is obvious $P_\infty = P'\infty$.
+Suppose $P_\infty = P'_\infty$. 
+A $\le k$ tuple is a tuple with $k$ or less elements.
+For every $k$ let $A(k), A_'(k)$ be the set of $\le k-tuples$ in $P\infty$ and $P'_\infty$.
+For every $k$ there exist a place $m$ after which the set of $\le k-tuples$ does not change and is identical in 
+$P_i$ and $P'_i$ for all $i\ge m$. 
+
+A $k-layer$ in a structure is the set states with $k$ value changes from the root.
+We will prove that the $\le k$ layers in $I_i$ and $I'_i$ are identical.
+Then it follows immediately that $I_\infty \equiv I'_\infty$.
+
+Proof is by induction, with the base given by $I_0=I'_0$.
+Let $n<m$ and $n'<m'$ be the last indexes changing the $(k-1)-tuples$ in $\{P_i\}, \{P'_i\}$, 
+and suppose by induction that the $\le k$ layers of $I_{n+1}$ and $I'_{n'+1}$ are identical.
+
+The operations $HS(\alpha, P), WS(\alpha, P)$, when $\alpha$ is in the $k-layer$ of $P$ only change that $k-layer$.
+Because the way $HS$ and $WS$ change the, if $P_m=P'_m$ and were obtained from $P_n=P'_n$ by two sequences of 
+stutter operations, then the $\le (k+1)-layers$ of $I_m, I'_m$ are identical.
+
+Q.E.D.
+
+We can now use the lemma to prove the following
+
+Theorem
+Let $I, J, K$ be structures so that $I<J, K$. Then there exists $H$ so that $J, K < H$.
+
+Proof
+Assume all states in $I$ have different values, and let $\{J_i\}, \{K_i\}$ be simple stutter sequences with
+$J_\infty = J, K_\infty = K$. We will construct two stutter sequences $\{H^J_i\}, \{H^K_i\}$ 
+from $J$ and $K$ to $H$.
+
+Start with $H^J_0=J, H^K_0=K$, and proceed by double induction. Let $\{P^J_i\}, \{P^K_i\}$ be the matching
+sequences of address sets. In every step, let $k$ be the minimal so that there exists in a $k-tuple$
+in $P^K_i \xor P^J_i$, and let $\alpha$ be that $k-tuple$. Suppose w.l.g. that $\alpha\in P^J_i$ and
+$\alpha\not\in P^K_i$. Let $\beta$ be the shortest prefix of $\alpha$ that appears in $P^K_i$, and let $op$
+be the first symbol after $\beta$ in $\alpha$. If $op=\rightarrow$, perform $HS$ on $\beta$ in $H^K_i$. 
+Otherwise, $op=\uparrow$, perform $WS$ on $\beta$ in $H^K_i$ and let $H^J_{i+1}=H^J_i$.
+
+There is only a finite number of $k-tuples$ in every $P^J_i$ and $P^K_i$, so 
+
+\end{document}
