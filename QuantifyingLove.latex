@@ -9,123 +9,71 @@
 
 \begin{document}
 
+\maketitle
 
+There is much work in the literature that assumes a known quantification of love
+("you don't love me enough", "you love her more than you love me", etc...). This papers attempts to quantify
+the term "love".
 
+Let $P$ be a set of love-capable agents \footnote{we will focus our discussion on people, but other 
+entities are assumed to be able to show "love" as well} and $U$ be a set of variables.
+The variables in $U$ need not be of any one domain ("money in bank account X" and "person Y's physical well being"
+are examples of such variables). A state $s$ is an assignment to every variable in $U$.
+Let $S$ denote the set of states.
+A "happiness function" is a function
+$\phi:S\rightarrow [0, 1]$. For simplicity, we take the set of time points to be the discreet $\nats$, although
+other choices such as $\reals$ could be justified as well. The target $[0, 1]$ was chosen to simplify comparison
+between different people's happiness function.
 
-\subsection{stutter notation}
-We introduce a notation for representing certain sequences of stuttered structures. We call a sequences of 
-stuttered structures $\{I_i\}$ {\em simple}, if
+We assume that for every person $p$, his goal in life is to maximize the expression
+$\Phi_p\triangleq \Sigma_{t=0}^{T}\phi_p(s_t)$, where $T$ is his moment of death, $\phi_p$ is his happiness
+function, and $\{s_0\dots s_T\}$ are the states during his lifetime (we choose $t=0$ as the moment of his birth).
+It can be argued that a person's happiness function may change over time - for example, he may
+like apples and hate oranges when he is young, and switch tastes when he gets older. We don't investigate 
+this point further and assume that it if at all, the happiness function changes only very slowly, and
+is considered fixed in our analysis.
 
-\begin{enumerate}
-\item Every state in $I$ has a different valuation
-\item The stutter operations in $\{I_i\}$ are sorted according to depth.
-\item A stutter operation is performed at most one on every node.
-\end{enumerate}
+The universe $U$ can be decomposed into $U^I$, the internal variables (including
+a person's well being, sense of taste, bank account) and $U^E$, the external variables relative to person $p$. 
+A state $s_t$ is similarly decomposed into $s_t^I$ and $s_t^E$
+We will assume such a decomposition of $U$ into external and internal variables exist,
+though defining one might not be an easy problem. Furthermore, we assume a composition function $f_p$ exists,
+so that $\phi_p(s_t) = f_p(\phi_p^I(s_t^I), \phi_p^E(s_t^E))$, and $f_p$ is a monotonically increasing function.
 
-The first condition is assumed to simplify the notation, and it can be relaxed by changing states in $I$ 
-with identical value $v$ to new values $v_0\dots v_k$, and then changing in $I_\infty$ all values $v_i, i\le k$ to
-$v$.
+Let $\phi_{(p,q)}$ be $p$'s estimates on $q$'s happiness function. That is, $\phi_{(p, q)}$ is $p's$ approximation
+of $\phi_q$.
+We define a person's {\em love function} as a function $l_p:P\setminus \{p\}\rightarrow \reals$ so that 
+$\phi_p^E(s_t^E)=\Sigma_{q\ne p} l(q)\phi_{(p,q)}(s_t)$. We assume here that the external happiness $\phi_p^E$ is
+determined solely by the happiness function of all other people, though this could be extended to include
+other factors as well. Note that for a given other $q$, if $l_p(q)=0$ then $p$ does not care at all about
+$q$'s happiness, and if $l_p(q)<0$ then $p$ likes it when he thinks $q$ suffers. For most people $p$ and $q$, 
+$l_p(q)$ is very nearly 0, as there is very little interaction (perhaps maybe for Jesus Christ or other saints
+it is different).
 
-If $I\slt I_\infty$ then there exists a sequence $\{I'_i\}$ with starting with $I_0$
-with limit $I_\infty$, which satisfies the second and third conditions.
+Cooperation is a useful strategy in maximizing $\Phi_p$. Suppose $l_p(q) \ge 0$, and let's say $p$ thinks
+$q$ is reliable, regardless of his other properties. And let us say $p$ at moment $t$ can choose between two
+different actions $A$ and $B$. Let $S_A$ be the state if $A$ is taken, and $S_B$ be the state if $B$ is taken.
+Suppose $\phi_p^I(A) < \phi_p^I(B)$ and $\phi_(p, q)(A)-\phi_(p, q)(B) > \phi_p^I(B) - \phi_p^I(A)$. 
+Then by choosing to take action $A$ over $B$, $p$ ensures $q$'s happiness increases by more than his own would by choosing $A$.
+If at some
+later point $t'$ person $q$ does the same, the overall benefit for both $p$ and $q$ is greater than by greedily
+choosing the currently better option $B$. Note that if $p$ hates $q$ and $l_p(q)<0$, this may no longer be
+a wise strategy - helping $q$ might lower $p$'s own happiness further, does making the deal a non profitable one.
+On the other hand, if $l_p(q)>>0$ (for example, $l_p(q)=0.5$), then it might benefit $p$ to help $q$ even at a great
+personal expense, and not just for the promise of future rewards. $p$ benefits from helping $q$ because 
+he feels happier when $q$ is, so part of the cost on $p$'s part is negated by this.
 
-For $op\in\{\rightarrow, \uparrow\}$ and tuple $\alpha=(v_1\dots v_k), \beta=(u_1\dots u_m)$ we define
-$\alpha op\triangleq (v_1\dots v_k op)$ and $\alpha\beta=(v_1\dots v_k, u_1\dots u_m). 
-
-We define a notion of $address$, which includes a set of directions on how to reach a state $s$ from the root $r$.
-For the initial structure $I$ the address of a state $v$ of depth $k$ is simply a tuple of $k+1$ state values 
-along a path from the root reaching $s$. If the address of a state in $I_i$ is $\alpha$, and $I_{i+1}$ is 
-obtained by applying $HS$ to $v$,
-then:
-
-\begin{enumerate}
-\item The address of $v$ in $I_{i+1}$ is not changed.
-\item The address of the new copy of $v$ in $S$ is $\alpha\rightarrow$.
-\item For a decendant of $v$ in $I_i$ with address $\alpha\beta$, the address in $I_{i+1}$
-becomes $\alpha\rightarrow\beta$. More specifically, if $\alpha=(v_1\dots v_k), \beta=(u_1\dots u_m)$, then the address in the new structure is $(v_1\dots v_k-1, v_k\rightarrow, u_1\dots u_m)$.
-\end{enumerate}
-
-Let $P^k(I)$ be the set of addresses in $I$ starting at the root, with exactly $k$ different values. For example, if $I$ is the following structure:
-
-\image{paths1.eps}
-
-Then:
-
-\[\begin{array}{l}
-P^0(I) = \{\} 			\\
-P^1(I) = \{1\} 			\\
-P^2(I) = \{(1,2), (1,3)\}		\\
-\end{array}\]
-
-We identify $P_k(I)$ with $P$ when $I$ and $k$ are clear by context.
-Let $\alpha\in P$. Then we define
-
-\[\begin{array}{l}
-HS(\alpha, P) \triangleq P \setminus \{\alpha\beta | \alpha\betea\in P\} \cup \{\alpha\}
-\cup \{\alpha\rightarrow\beta | \alpha\beta\in P\} \\
-WS(\alpha, P) \triangleq P \cup \{alpha\uparrow\beta | \alpha\beta\in P\} \\
-\end{array}\]
-
-\image{paths2.eps}
-
-Let $P_0=P^k(I)$, and for $i>0, P_i=op(\alpha, P_{i-1})$, where $op\in \{HS, WS\}$ is the stutter operation 
-performed in the corresponding place in ${I_i}$, with $\alpha$ as the focus. 
-There is bijection between structures in $\{I_i\}$ and address sets in $\{P_i\}$. 
-
-Lemma
-
-Let $\{I_i\}, \{I'_i\}$ be simple sequences of structures that satisfy:
-\begin{enumerate}
-\item $I'_0=I_0$
-\item $I_0\slt I_\infty$
-\item $I'_0\slt I'_\infty$
-\end{enumerate}
-
-Let $\{P_i\}$ and $\{P'_i\}$ be sequences of the sets of all addresses in $\{I_i\}, \{I'_i\}$.
-Let $P_\infty, P'_\infty$ be the limits of $\{P_i\}$ and $\{P'_i\}$. Then
-
-\[\begin{array}{l}
-P_\infty = P'_\infty	& {\em \mbox{if and only if}}	& I_\infty \equiv I'_\infty
-\end{array}\]
-
-If $I_\infty\equiv I'_\infty$ then it is obvious $P_\infty = P'\infty$.
-Suppose $P_\infty = P'_\infty$. 
-A $\le k$ tuple is a tuple with $k$ or less elements.
-For every $k$ let $A(k), A_'(k)$ be the set of $\le k-tuples$ in $P\infty$ and $P'_\infty$.
-For every $k$ there exist a place $m$ after which the set of $\le k-tuples$ does not change and is identical in 
-$P_i$ and $P'_i$ for all $i\ge m$. 
-
-A $k-layer$ in a structure is the set states with $k$ value changes from the root.
-We will prove that the $\le k$ layers in $I_i$ and $I'_i$ are identical.
-Then it follows immediately that $I_\infty \equiv I'_\infty$.
-
-Proof is by induction, with the base given by $I_0=I'_0$.
-Let $n<m$ and $n'<m'$ be the last indexes changing the $(k-1)-tuples$ in $\{P_i\}, \{P'_i\}$, 
-and suppose by induction that the $\le k$ layers of $I_{n+1}$ and $I'_{n'+1}$ are identical.
-
-The operations $HS(\alpha, P), WS(\alpha, P)$, when $\alpha$ is in the $k-layer$ of $P$ only change that $k-layer$.
-Because the way $HS$ and $WS$ change the, if $P_m=P'_m$ and were obtained from $P_n=P'_n$ by two sequences of 
-stutter operations, then the $\le (k+1)-layers$ of $I_m, I'_m$ are identical.
-
-Q.E.D.
-
-We can now use the lemma to prove the following
-
-Theorem
-Let $I, J, K$ be structures so that $I<J, K$. Then there exists $H$ so that $J, K < H$.
-
-Proof
-Assume all states in $I$ have different values, and let $\{J_i\}, \{K_i\}$ be simple stutter sequences with
-$J_\infty = J, K_\infty = K$. We will construct two stutter sequences $\{H^J_i\}, \{H^K_i\}$ 
-from $J$ and $K$ to $H$.
-
-Start with $H^J_0=J, H^K_0=K$, and proceed by double induction. Let $\{P^J_i\}, \{P^K_i\}$ be the matching
-sequences of address sets. In every step, let $k$ be the minimal so that there exists in a $k-tuple$
-in $P^K_i \xor P^J_i$, and let $\alpha$ be that $k-tuple$. Suppose w.l.g. that $\alpha\in P^J_i$ and
-$\alpha\not\in P^K_i$. Let $\beta$ be the shortest prefix of $\alpha$ that appears in $P^K_i$, and let $op$
-be the first symbol after $\beta$ in $\alpha$. If $op=\rightarrow$, perform $HS$ on $\beta$ in $H^K_i$. 
-Otherwise, $op=\uparrow$, perform $WS$ on $\beta$ in $H^K_i$ and let $H^J_{i+1}=H^J_i$.
-
-There is only a finite number of $k-tuples$ in every $P^J_i$ and $P^K_i$, so 
-
+If $l_p(q)=1$, then $p$ values $q$'s happiness as much as their own. Examples exist when $l_p(q)>1$, for example
+mothers are known to suffer for their babies - of course enjoying it overall because the positive effect 
+of their babies' happiness on their own. Pathological cases of $l_p(q) >>1$ are considered psychologically unhealthy,
+as $p$ cares more for $q$ than for himself and will be severely disappointed if his love function change later on,
+because his own personal happiness $\phi_p^I$ is presumably very low because of altruistic choices he has made to increase $q$'s
+happiness. Another danger is a bad approximation of $l_q$ by $p$. If $\phi_(p,q)$ is very different from $\phi_p$,
+then the described strategy of mutual helping will fail, as $q$ will not feel inclined to help $p$ 
+since $p$'s actions increased $\phi_(p,q)$ but not $\phi_q$.
+It would be interesting to find if 
+friends and acquaintances have $l$ somewhere around $0.5$ or some other number roughly in the middle of $[0,1]$.
+This author consider an ideal relationship of any kind to have $l=1$, where one considers the other person's
+happiness just as highly as he considers his. That ideal is probably hardly ever realized in this world,
+but one can still hope.
 \end{document}
